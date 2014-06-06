@@ -81,7 +81,6 @@ CSV="path\file.csv"       ; write to CSV file
 START = consumer.exe  ; start consumer.exe
 COUNT = 3             ; run 3 instances. if ommitted, default is 1
 METRIC = MEM.WS < 1%  ; working set must be constant
-~~~
 
 [producer]            ; run the producer
 ATTACH = producer.exe ; don't start it - attach to an existing instance 
@@ -90,6 +89,7 @@ ATTACH = producer.exe ; don't start it - attach to an existing instance
                       ; specified, e.g. 'producer.exe:5624'
 METRIC = CPU < 50     ; CPU usage must not exceed 50%
 METRIC = MEM.WS < 1%  ; working set must be constant
+~~~
 
 
 Supported metrics
