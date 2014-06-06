@@ -39,7 +39,10 @@
     <ClInclude Include="app_runner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="monitor.h">
+    <ClInclude Include="monitoring_backend.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="collector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,7 +68,10 @@
     <ClCompile Include="app_runner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="monitor.cpp">
+    <ClCompile Include="monitoring_backend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="collector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

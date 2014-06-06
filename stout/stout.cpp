@@ -4,8 +4,9 @@
 #include "stdafx.h"
 #include "config.h"
 #include "app_runner.h"
-#include "monitor.h"
+#include "collector.h"
 #include "metrics/metrics_server.h"
+#include "monitoring_backend.h"
 #include <iostream>
 
 #define TCLAP_NAMESTARTSTRING "--"
@@ -20,9 +21,12 @@ metrics::server start_server(const config& cfg)
     auto on_flush = [] { printf("flushing!"); }; // check differences
 
     console_backend console;
+    monitoring_backend mon(cfg);
+
     auto server_cfg = metrics::server_config(cfg.server_port())
         //.pre_flush(on_flush) 
-        .flush_every(cfg.sampling_time())       
+        .flush_every(cfg.sampling_time())
+        .add_backend(mon)
         .add_backend(console);
 
     return server::run(server_cfg);
@@ -42,11 +46,11 @@ int _tmain(int argc, _TCHAR* argv[])
     {
         config cfg = config::load(iniFileArg.getValue());
         app_runner runner(cfg);
-        monitor monitor(cfg, runner);
+        collector collector(cfg, runner);
 
         auto server = start_server(cfg);                                                
         runner.start_apps();
-        monitor.run();
+        collector.run();
 
         printf("Monitoring started, press ENTER to exit...\n");
         char buff[32];
