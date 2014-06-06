@@ -21,7 +21,7 @@ metrics::server start_server(const config& cfg)
 
     console_backend console;
     auto server_cfg = metrics::server_config(cfg.server_port())
-        .pre_flush(on_flush) 
+        //.pre_flush(on_flush) 
         .flush_every(cfg.sampling_time())       
         .add_backend(console);
 
@@ -38,17 +38,14 @@ int _tmain(int argc, _TCHAR* argv[])
 
     if (!iniFileArg.isSet()) return 1;
 
-
     try 
     {
         config cfg = config::load(iniFileArg.getValue());
-
-        auto server = start_server(cfg);
-                                              
         app_runner runner(cfg);
-        auto processes = runner.start_apps();
-
         monitor monitor(cfg, runner);
+
+        auto server = start_server(cfg);                                                
+        runner.start_apps();
         monitor.run();
 
         printf("Monitoring started, press ENTER to exit...\n");

@@ -46,10 +46,10 @@ public:
     typedef std::vector<proc_info> processes_list;
 
     static config load(const std::string& ini_file);
-    int server_port() const { return 9999; }
-    int initial_delay() const { return 5000; }
-    int sampling_time() const { return 5000; }
-    int testrun_duration() const { return 5; }
+    int server_port() const { return m_server_port; }
+    int initial_delay() const { return m_initial_delay; }
+    int sampling_time() const { return m_sampling_time; }
+    int testrun_duration() const { return m_testrun_duration; }
     e_error_reaction error_reaction() const { return log_it; }
     const backend_list& backends() const { return m_backends; }
     const processes_list& processes() const { return m_processes; }

@@ -56,7 +56,8 @@ DELAY = 5            ; Initial delay in seconds. When the tested apps are
                      ; expires. If ommitted, default is 5000 (5 s)
 SAMPLING_TIME = 60   ; How often will counters be averaged and evaluated, in 
                      ; seconds. This is also the duration of baseline assessment
-                     ; If ommitted, 60 s is used as default
+                     ; If ommitted, 60 s is used as default. Valid values are in
+                     ; range [10-3600]
 ON_ERROR = LOG       ; LOG | STOP - how to react if limits are violated. If LOG
                      ; is specified, violation will be logged and test will
                      ; continue. If STOP is specified, test will be aborted.
@@ -95,11 +96,11 @@ METRIC = MEM.WS < 1%  ; working set must be constant
 Supported metrics
 -----------------
 
-Name     | Description
-:--------|----------------------------------------------------------
-MEM.WS   | Working set size. If using absolute limit, it is specified in kB    
-MEM.PB   | Private bytes. If using absolute limit, it is specified in kB        
-CPU      | CPU usage. if using absolute limit, it is specified in %            
+Name       | Description
+:----------|----------------------------------------------------------
+`MEM.WS`   | Working set size. If using absolute limit, it is specified in kB    
+`MEM.PB`   | Private bytes. If using absolute limit, it is specified in kB        
+`CPU`      | CPU usage. if using absolute limit, it is specified in %            
 
 
 Logging and backends

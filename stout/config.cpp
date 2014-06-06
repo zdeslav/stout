@@ -173,7 +173,7 @@ void config::ParseProcessSection(const std::string& section)
         string msg = "START or ATTACH must be specified for each process (" + section + ")";
         throw stout_exception(msg.c_str());
     }
-    keys.get(proc.instance_count, "COUNT", 0);
+    keys.get(proc.instance_count, "COUNT", 1);
     
     // now collect metrics for process
     proc.m_watches.insert(proc.m_watches.end(), m_watches.begin(), m_watches.end()); // first add common watches
