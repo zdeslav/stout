@@ -98,6 +98,7 @@ Supported metrics
 -----------------
 
 Following table lists all the metrics that are collected. 
+
 Name       | Description
 :----------|----------------------------------------------------------
 `MEM_WS`   | Working set size. If using absolute limit, it is specified in kB    

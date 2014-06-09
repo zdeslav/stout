@@ -45,6 +45,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
     try 
     {
+        printf("Press ENTER to exit...\n");
         printf("loading config...\n");
         config cfg = config::load(iniFileArg.getValue());
         app_runner runner(cfg);
@@ -58,7 +59,6 @@ int _tmain(int argc, _TCHAR* argv[])
         runner.start_apps();
         collector.run();
 
-        printf("Press ENTER to exit...\n");
         char buff[32];
         gets_s(buff, 30);
 

@@ -36,22 +36,25 @@ namespace metrics
     timer::duration timer::since(int when){ return now() - when; }
     std::string timer::to_string(timer::time_point time)
     { 
+        auto diff = now() - time;
         FILETIME tm;
         SYSTEMTIME st;
-        GetSystemTimeAsFileTime(&tm);
-        auto diff = now() - time;
+
+        GetLocalTime(&st);
+        SystemTimeToFileTime(&st, &tm);
 
         _ULARGE_INTEGER ui;
         ui.LowPart = tm.dwLowDateTime;
         ui.HighPart = tm.dwHighDateTime;
-        ui.QuadPart = ui.QuadPart - diff * 10000;
+        ULONGLONG back = diff * 1000;
+        ui.QuadPart = ui.QuadPart - back;
         tm.dwLowDateTime = ui.LowPart;
         tm.dwHighDateTime = ui.HighPart;
         FileTimeToSystemTime(&tm, &st);
         char txt[256];
         sprintf_s(txt, "%04d-%02d-%02dT%02d:%02d:%02d.%03d",
-                st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
-        return txt;
+                  st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        return txt; 
     }
 
     client_config& setup_client(const std::string& server, unsigned int port)
