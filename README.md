@@ -68,8 +68,8 @@ DURATION = 60        ; How long will test be executed, in minutes. When this
                      
 ; metrics which are required for all tested apps are specified here
 
-METRIC = MEM.WS < 1% ; Working set for all apps must not increase more than 1%
-METRIC = MEM.PB < 1% ; Private bytes for all apps must not increase more than 1%
+METRIC = MEM_WS.avg < 1% ; Working set for all apps must not increase more than 1%
+METRIC = MEM_PB.avg < 1% ; Private bytes for all apps must not increase more than 1%
 
 
 [STOUT::BACKENDS]         ; collected data are written to specified backends
@@ -78,29 +78,39 @@ CSV="path\file.csv"       ; write to CSV file
 
 ; now we configure tested apps
 
-[consumer]            ; each app has a symbolic name - consumer, in this case
-START = consumer.exe  ; start consumer.exe
-COUNT = 3             ; run 3 instances. if ommitted, default is 1
-METRIC = MEM.WS < 1%  ; working set must be constant
+[consumer]               ; each app has a symbolic name - consumer, in this case
+START = consumer.exe     ; start consumer.exe
+COUNT = 3                ; run 3 instances. if ommitted, default is 1
+METRIC = MEM_WS.avg < 1% ; working set must be constant
 
-[producer]            ; run the producer
-ATTACH = producer.exe ; don't start it - attach to an existing instance 
-                      ; In this case, COUNT is attached.
-                      ; if multiple instances are running, process id can be
-                      ; specified, e.g. 'producer.exe:5624'
-METRIC = CPU < 50     ; CPU usage must not exceed 50%
-METRIC = MEM.WS < 1%  ; working set must be constant
+[producer]               ; run the producer
+ATTACH = producer.exe    ; don't start it - attach to an existing instance 
+                         ; In this case, COUNT is attached.
+                         ; if multiple instances are running, process id can be
+                         ; specified, e.g. 'producer.exe:5624'
+METRIC = CPU.avg < 10    ; avg CPU usage must not exceed 10%
+METRIC = CPU.max < 50    ; peak CPU usage must not exceed 50%
+METRIC = MEM_WS.avg < 1% ; working set must be constant
 ~~~
 
 
 Supported metrics
 -----------------
 
+Following table lists all the metrics that are collected. 
 Name       | Description
 :----------|----------------------------------------------------------
-`MEM.WS`   | Working set size. If using absolute limit, it is specified in kB    
-`MEM.PB`   | Private bytes. If using absolute limit, it is specified in kB        
+`MEM_WS`   | Working set size. If using absolute limit, it is specified in kB    
+`MEM_PB`   | Private bytes. If using absolute limit, it is specified in kB        
 `CPU`      | CPU usage. if using absolute limit, it is specified in %            
+
+Checks can be done against average, min and max value and standard deviation:
+
+~~~
+METRIC = CPU.avg < 10    ; avg CPU usage must not exceed 10%
+METRIC = CPU.max < 50    ; peak CPU usage must not exceed 50%
+                         ; avg / min / max / stddev are supported
+~~~
 
 
 Logging and backends

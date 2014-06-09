@@ -8,6 +8,15 @@ enum e_error_reaction {
     stop_test
 };
 
+enum e_metric_value {
+    avg_value,
+    min_value,
+    max_value,
+    stddev_value
+};
+
+const char* value_type_to_string(e_metric_value type);
+
 enum e_watch_model {
     relative,
     absolute
@@ -17,11 +26,27 @@ enum e_watch_operator {
     operator_gt
 };
 
+
 struct watch {  
     e_watch_model model; 
     e_watch_operator watch_op;
+    e_metric_value value_type;
     std::string counter;
     int operand;
+    mutable bool failed_already;
+    std::string to_string()
+    {
+        char txt[256];
+        sprintf_s(txt, "%s.%s %s %d %s",
+                  counter.c_str(),
+                  value_type_to_string(value_type),
+                  (watch_op == operator_lt) ? "<" : ">",
+                  operand,
+                  (model == relative) ? "%" : " ");
+        return txt;
+    }
+
+    void mark_failed() const { failed_already = true; }
 };
 
 struct backend {
@@ -50,7 +75,7 @@ public:
     int initial_delay() const { return m_initial_delay; }
     int sampling_time() const { return m_sampling_time; }
     int testrun_duration() const { return m_testrun_duration; }
-    e_error_reaction error_reaction() const { return log_it; }
+    e_error_reaction error_reaction() const { return m_error_reaction; }
     const backend_list& backends() const { return m_backends; }
     const processes_list& processes() const { return m_processes; }
 

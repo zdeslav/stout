@@ -3,6 +3,11 @@
 #include "config.h"
 
 app_runner::app_runner(const config& cfg) : m_cfg(cfg) {}
+app_runner::~app_runner()
+{
+    stop_apps();
+    m_processes.clear();
+}
 
 PROCESS_INFORMATION StartProcess(const proc_info proc)
 {

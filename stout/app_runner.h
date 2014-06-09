@@ -19,6 +19,7 @@ public:
     typedef std::vector<process_runtime_info> runtime_list;
 
     app_runner(const config& cfg);
+    ~app_runner();
 
     const runtime_list& start_apps();
     void stop_apps();

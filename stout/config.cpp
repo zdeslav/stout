@@ -9,6 +9,17 @@ const char* STOUT_BACKENDS = "STOUT::BACKENDS";
 using namespace std;
 
 
+const char* value_type_to_string(e_metric_value type) {
+    switch (type)
+    {
+        case avg_value: return "avg";
+        case min_value: return "min";
+        case max_value: return "max";
+        case stddev_value: return "stddev";
+        default: return "?";
+    }
+}
+
 struct KeyDict
 {    
     typedef std::pair<std::string, std::string> ini_entry;
@@ -43,10 +54,20 @@ watch parse_watch(const std::string& exp)
 
     _strlwr_s(tmp);
     watch w;
+    w.failed_already = false;
     char* pos = tmp;
     char* ctxt = NULL;
-    pos = strtok_s(pos, " ", &ctxt);
-    if (pos)w.counter = pos; // todo: verify if known counter
+    pos = strtok_s(pos, ".", &ctxt);
+    if (!pos) throw stout_exception(err_msg.c_str());
+    w.counter = pos; // todo: verify if known counter
+
+    pos = strtok_s(NULL, " ", &ctxt);
+    if (!pos) throw stout_exception(err_msg.c_str());
+    if (!_strcmpi("avg", pos)) w.value_type = avg_value;
+    else if (!_strcmpi("min", pos)) w.value_type = min_value;
+    else if (!_strcmpi("max", pos)) w.value_type = max_value;
+    else if (!_strcmpi("stddev", pos)) w.value_type = stddev_value;
+    else throw stout_exception(err_msg.c_str());
 
     pos = strtok_s(NULL, " ", &ctxt);
     if (!pos) throw stout_exception(err_msg.c_str());
@@ -135,7 +156,7 @@ void config::ParseCommon()
 
     string err;
     keys.get(err, "ON_ERROR", "LOG");
-    m_error_reaction = (_strcmpi(err.c_str(), "STOP") == 0 ? stop_test : log_it);
+    m_error_reaction = (_strnicmp(err.c_str(), "STOP", 4) == 0 ? stop_test : log_it);
 
     fill_watches(m_watches, keys);
 }

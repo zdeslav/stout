@@ -22,12 +22,13 @@ metrics::server start_server(const config& cfg)
 
     console_backend console;
     monitoring_backend mon(cfg);
+    json_file_backend json("d:\\load.json");
 
     auto server_cfg = metrics::server_config(cfg.server_port())
         //.pre_flush(on_flush) 
         .flush_every(cfg.sampling_time())
         .add_backend(mon)
-        .add_backend(console);
+        .add_backend(json);
 
     return server::run(server_cfg);
 }
@@ -44,15 +45,20 @@ int _tmain(int argc, _TCHAR* argv[])
 
     try 
     {
+        printf("loading config...\n");
         config cfg = config::load(iniFileArg.getValue());
         app_runner runner(cfg);
         collector collector(cfg, runner);
 
-        auto server = start_server(cfg);                                                
+        auto server = start_server(cfg);  
+        metrics::setup_client("localhost", cfg.server_port())
+            .set_namespace("stout")
+            .track_default_metrics(metrics::none);
+        printf("starting applications...\n");
         runner.start_apps();
         collector.run();
 
-        printf("Monitoring started, press ENTER to exit...\n");
+        printf("Press ENTER to exit...\n");
         char buff[32];
         gets_s(buff, 30);
 
