@@ -23,7 +23,7 @@ DWORD WINAPI collector::thread_proc(LPVOID params)
     auto processes = coll->m_runner.processes();
 
     Sleep(delay * 1000);
-    printf("initial delay expired - data collection started...\n");
+    printf("initial delay expired - baseline assessment started...\n");
 
     while (true) {
         // todo: use PDH?

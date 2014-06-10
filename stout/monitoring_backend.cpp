@@ -46,7 +46,7 @@ void monitoring_backend::operator()(const metrics::stats& stats)
                 else
                 {
                     printf("Exiting due to error!");
-                    exit(0); // todo: signal main thread to stop apps
+                    exit(1); // todo: signal main thread to stop apps
                 }
             }
         }

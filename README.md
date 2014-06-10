@@ -3,7 +3,7 @@ Stout - stability tester
 
 Stout is a simple tool to check performance stability of long running 
 applications. E.g. it can be used to verify that a server application doesn't
-leak memory, or that it never exceed specified CPU usage.
+leak memory, or that it never exceeds specified CPU usage.
 
 Usage
 -----
@@ -41,13 +41,15 @@ Tests are configured through simple ini file which specifies which processes are
 to be executed, which counters are to be monitored, and which limits are to be
 checked.
 
-Stout starts the tested application and then lets them run for some time to 
-collect baseline data. This is controlled by DELAY and SAMPLING_TIME parameters.
+Stout starts the applications under test or attaches to running applications and
+then lets them run for some time to collect baseline data. This is controlled by
+DELAY and SAMPLING_TIME parameters.
 
 Then it continues to monitor the running application and compares the collected
-metrics against the baseline data.
+metrics against the baseline data. In case that some limit has been violated it
+reports an error and optionally stops the test.
 
-Example:
+Here is an example of configuration file:
 
 ~~~{.ini}
 [STOUT::COMMON]      ; Common parameters 

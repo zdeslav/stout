@@ -43,7 +43,8 @@ PROCESS_INFORMATION AttachToProcess(const proc_info proc)
     } while (Process32Next(hProcessSnap, &pe32));
 
     CloseHandle(hProcessSnap);  
-    throw stout_exception("can't find process");
+    std::string msg = "can't find process " + proc.process_name;
+    throw stout_exception(msg.c_str());
 }
 
 PROCESS_INFORMATION StartProcess(const proc_info proc)
