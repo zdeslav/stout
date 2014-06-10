@@ -10,7 +10,6 @@ struct process_runtime_info {
     std::string process_name;
     std::string process_path;
     HANDLE h_proc;
-    HANDLE h_thread;
 };
 
 class app_runner
